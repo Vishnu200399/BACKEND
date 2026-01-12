@@ -17,25 +17,32 @@ CORS(app, resources={
     }
 })
 
-@app.after_request
-def after_request(response):
-    response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
-    response.headers.add("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
-    return response
 
 # ---------- AUTH ----------
 @app.route("/register", methods=["POST"])
 def register():
-    data = request.json
-    success, message = register_user(data["username"], data["password"])
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({"success": False, "message": "Invalid JSON"}), 400
+
+    success, message = register_user(
+        data.get("username"),
+        data.get("password")
+    )
     return jsonify({"success": success, "message": message})
+
 
 @app.route("/login", methods=["POST"])
 def login():
-    data = request.json
-    success, role = authenticate_user(data["username"], data["password"])
-    return jsonify({"success": success, "role": role})
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({"success": False, "message": "Invalid JSON"}), 400
 
+    success, role = authenticate_user(
+        data.get("username"),
+        data.get("password")
+    )
+    return jsonify({"success": success, "role": role})
 
 
 

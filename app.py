@@ -11,9 +11,33 @@ from detector import detect_anomaly
 app = Flask(__name__)
 
 # ✅ Allow ALL Netlify origins (simple + safe)
-CORS(app, origins=[
-    "https://frontend-sigma-woad-62.vercel.app/"
-])
+CORS(app, resources={
+    r"/*": {
+        "origins": "https://frontend-sigma-woad-62.vercel.app"
+    }
+})
+
+@app.after_request
+def after_request(response):
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
+    response.headers.add("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
+    return response
+
+# ---------- AUTH ----------
+@app.route("/register", methods=["POST"])
+def register():
+    data = request.json
+    success, message = register_user(data["username"], data["password"])
+    return jsonify({"success": success, "message": message})
+
+@app.route("/login", methods=["POST"])
+def login():
+    data = request.json
+    success, role = authenticate_user(data["username"], data["password"])
+    return jsonify({"success": success, "role": role})
+
+
+
 
 
 UPLOAD_FOLDER = "uploads"
@@ -39,18 +63,7 @@ def save_history(history):
 def home():
     return jsonify({"message": "Backend running"})
 
-# ---------- AUTH ----------
-@app.route("/register", methods=["POST"])
-def register():
-    data = request.json
-    success, message = register_user(data["username"], data["password"])
-    return jsonify({"success": success, "message": message})
 
-@app.route("/login", methods=["POST"])
-def login():
-    data = request.json
-    success, role = authenticate_user(data["username"], data["password"])
-    return jsonify({"success": success, "role": role})
 
 # ---------- PREDICT ----------
 @app.route("/predict", methods=["POST"])
@@ -113,6 +126,5 @@ def download_sample():
     })
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
-
+    import os
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))

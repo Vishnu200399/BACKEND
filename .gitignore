@@ -1,0 +1,6 @@
+sample_data/
+*.zip
+results/
+uploads/
+__pycache__/
+venv

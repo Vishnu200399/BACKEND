@@ -1,0 +1,20 @@
+[
+    {
+        "username": "Rock@123",
+        "image": "http://localhost:5000/uploads/aug_0944.png",
+        "result": "NORMAL",
+        "score": 4.919577464821615e-05,
+        "time": "2026-01-12 10:07:36",
+        "outline_image": "http://localhost:5000/results/outline_aug_0944_20260112_100736.png",
+        "filled_image": "http://localhost:5000/results/filled_aug_0944_20260112_100736.png"
+    },
+    {
+        "username": "Rock@123",
+        "image": "http://localhost:5000/uploads/defect_0706.png",
+        "result": "DEFECT",
+        "score": 15.167418903061014,
+        "time": "2026-01-12 10:07:47",
+        "outline_image": "http://localhost:5000/results/outline_defect_0706_20260112_100747.png",
+        "filled_image": "http://localhost:5000/results/filled_defect_0706_20260112_100747.png"
+    }
+]
